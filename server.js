@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const port = 8080;
+const port = 8080; // Usado como fallback, mas o Render sobrescreve com process.env.PORT
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -24,6 +24,7 @@ let users = [
 
 let meetings = [];
 let funnel = [];
+let currentUser = null; // Variável global para simular sessão (ajuste em produção)
 
 app.post('/api/register', (req, res) => {
   const { username, email, password } = req.body;
@@ -39,6 +40,7 @@ app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
   const user = users.find(u => u.email === email && u.password === password);
   if (user) {
+    currentUser = { username: user.username, email: user.email, isMaster: user.isMaster }; // Simula login
     res.json({ message: 'Login bem-sucedido', username: user.username, isMaster: user.isMaster });
   } else {
     res.status(401).json({ error: 'E-mail ou senha inválidos' });
@@ -48,7 +50,7 @@ app.post('/api/login', (req, res) => {
 app.post('/api/check-session', (req, res) => {
   const { email } = req.body;
   const user = users.find(u => u.email === email);
-  if (user) {
+  if (user && currentUser && currentUser.email === email) {
     res.json({ username: user.username, isMaster: user.isMaster });
   } else {
     res.status(401).json({ error: 'Sessão inválida' });
@@ -59,7 +61,7 @@ app.post('/api/meetings', (req, res) => {
   if (!currentUser || !currentUser.isMaster) {
     return res.status(403).json({ error: 'Acesso negado' });
   }
-  const meeting = { ...req.body, id: Date.now() };
+  const meeting = { ...req.body, id: Date.now(), userEmail: currentUser.email };
   meetings.push(meeting);
   res.json({ message: 'Reunião agendada com sucesso' });
 });
@@ -74,7 +76,7 @@ app.post('/api/funnel', (req, res) => {
   if (!currentUser || !currentUser.isMaster) {
     return res.status(403).json({ error: 'Acesso negado' });
   }
-  const opportunity = { ...req.body, id: Date.now() };
+  const opportunity = { ...req.body, id: Date.now(), userEmail: currentUser.email };
   funnel.push(opportunity);
   res.json({ message: 'Oportunidade adicionada com sucesso' });
 });
@@ -102,4 +104,4 @@ app.put('/api/funnel/:id', (req, res) => {
 
 app.listen(process.env.PORT || 8080, '0.0.0.0', () => {
   console.log(`Server running on port ${process.env.PORT || 8080}`);
-
+});
