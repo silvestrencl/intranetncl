@@ -100,6 +100,6 @@ app.put('/api/funnel/:id', (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://189.100.70.46:${port}`);
+app.listen(process.env.PORT || 8080, '0.0.0.0', () => {
+  console.log(`Server running on port ${process.env.PORT || 8080}`);
 });
