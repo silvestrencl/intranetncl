@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intranet NCL - Windows 1.0</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Courier New', 'Courier', monospace;
+      text-transform: uppercase;
+      overflow: hidden;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #000;
+      color: #ffa500;
+    }
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000080;
+      color: #ffa500;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      text-shadow: 0 0 2px #000, 0 0 2px #000;
+    }
+    #splash-screen .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #splash-screen .btn {
+      background: #808080;
+      border: 2px solid #ffa500;
+      padding: 15px 40px;
+      cursor: pointer;
+      font-size: 24px;
+      color: #ffa500;
+      text-align: center;
+      min-width: 250px;
+      z-index: 1000;
+      pointer-events: auto;
+      text-transform: uppercase;
+      box-sizing: border-box;
+    }
+    #splash-screen .btn:hover {
+      background: #a0a0a0;
+    }
+    #splash-screen .btn:active {
+      background: #b0b0b0;
+    }
+    #splash-screen .company-data {
+      position: absolute;
+      bottom: 20px;
+      text-align: center;
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+    #desktop {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      display: none;
+    }
+    .logo {
+      display: none;
+    }
+    .desktop-icon {
+      position: absolute;
+      text-align: center;
+      color: #ffa500;
+      cursor: pointer;
+      width: 150px; /* Increased to fit "LOGIN/CADASTRO" */
+      padding: 15px;
+      background-color: rgba(128, 128, 128, 0.7);
+      border: 2px solid #ffa500;
+      box-sizing: border-box;
+    }
+    .desktop-icon img {
+      width: 48px;
+      height: 48px;
+    }
+    .desktop-icon span {
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      white-space: normal; /* Allow text to wrap */
+    }
+    .window {
+      position: fixed;
+      border: 2px solid #ffa500;
+      background: #000;
+      min-width: 350px;
+      min-height: 250px;
+      max-width: 700px;
+      z-index: 10;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .window-titlebar {
+      background: #000080;
+      color: #ffa500;
+      padding: 4px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .window-title {
+      flex-grow: 1;
+      padding-left: 5px;
+    }
+    .window-buttons button {
+      width: 16px;
+      height: 16px;
+      background: #808080;
+      border: 1px solid #ffa500;
+      font-size: 10px;
+      cursor: pointer;
+      margin-right: 2px;
+      color: #ffa500;
+    }
+    .window-content {
+      padding: 10px;
+      background: #000;
+      height: calc(100% - 24px);
+      box-sizing: border-box;
+      color: #ffa500;
+      text-align: center;
+    }
+    .auth-form, .meeting-form, .funnel-form, .upload-form {
+      margin-top: 10px;
+      text-align: left;
+    }
+    .auth-form h3, .tab-content h3 {
+      font-size: 36px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: #ffa500;
+      text-align: center;
+    }
+    input, select, textarea, #file-upload {
+      width: calc(100% - 20px);
+      border: 2px solid #ffa500;
+      padding: 8px;
+      margin: 8px 0;
+      font-size: 16px;
+      text-transform: uppercase;
+      background: #000;
+      color: #ffa500;
+    }
+    .btn {
+      background: #808080;
+      border: 2px solid #ffa500;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 20px;
+      color: #ffa500;
+      display: inline-block;
+      text-align: center;
+      min-width: 150px;
+      margin: 10px 0;
+      z-index: 1000;
+      pointer-events: auto;
+      text-transform: uppercase;
+    }
+    .btn:hover {
+      background: #a0a0a0;
+    }
+    .btn:active {
+      background: #b0b0b0;
+    }
+    #auth-tabs, .content-tabs {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+    #auth-tabs button, .content-tabs button {
+      width: 150px;
+      margin-right: 5px;
+      font-size: 18px;
+      padding: 12px;
+      z-index: 1000;
+      pointer-events: auto;
+      text-transform: uppercase;
+      background: #808080;
+      border: 2px solid #ffa500;
+      color: #ffa500;
+    }
+    .list, .table {
+      margin-top: 15px;
+      text-align: left;
+    }
+    .list div, .table table {
+      border: 1px solid #ffa500;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #000;
+      color: #ffa500;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ffa500;
+      padding: 8px;
+      text-align: left;
+      background: #000;
+      color: #ffa500;
+    }
+    th {
+      background-color: #000080;
+      color: #ffa500;
+    }
+    .tab-content {
+      display: none;
+      text-align: center;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .stage-prospecção { color: red; }
+    .stage-contato-inicial { color: orange; }
+    .stage-proposta { color: yellow; }
+    .stage-negociação { color: green; }
+    .stage-fechamento { color: blue; }
+    .checklist-item {
+      margin: 10px 0;
+      text-align: left;
+      display: inline-block;
+      width: 90%;
+    }
+  </style>
+</head>
+<body>
+  <div id="splash-screen">
+    <div class="buttons">
+      <button class="btn" onclick="showAuthWindow()">CADASTRO</button>
+      <button class="btn" onclick="showAuthWindow()">LOGIN</button>
+    </div>
+    <div class="company-data">
+      <p>VERSION 1.01</p>
+      <p>2025</p>
+      <p>SEGUROS@NCLSEGUROS.COM.BR</p>
+      <p>11959004605</p>
+    </div>
+  </div>
+  <div id="desktop" class="desktop">
+    <div class="desktop-icon" style="top: 50px; left: 50px;" onclick="openWindow('HELP', '<h3>HELP</h3><p>SUPPORT INFORMATION HERE.</p>')">
+      <img src="images/ajuda.png" alt="AJUDA">
+      <span>AJUDA</span>
+    </div>
+    <div class="desktop-icon" style="top: 50px; left: 200px;" onclick="openWindow('SETTINGS', '<h3>TREINAMENTOS</h3><p><a href="https://drive.google.com/drive/folders/1qOOXsmrgh87AmgoqtmFeKRL-ilpZgmTk?usp=sharing" target="_blank">ACESSAR TREINAMENTOS</a></p>')">
+      <img src="images/treinamento.png" alt="TREINAMENTO">
+      <span>TREINAMENTO</span>
+    </div>
+    <div class="desktop-icon" style="top: 50px; left: 350px;" onclick="showAuthWindow()">
+      <img src="images/cadastro.png" alt="LOGIN/CADASTRO">
+      <span>LOGIN/CADASTRO</span>
+    </div>
+    <div class="desktop-icon" style="top: 150px; left: 50px;" onclick="showAgenda()">
+      <img src="images/calendario.png" alt="AGENDA">
+      <span>AGENDA</span>
+    </div>
+    <div class="desktop-icon" style="top: 150px; left: 200px;" onclick="showFunnel()">
+      <img src="images/funil.png" alt="FUNIL">
+      <span>FUNIL</span>
+    </div>
+    <div class="table" id="client-table"></div>
+  </div>
+
+  <script>
+    let currentUser = null;
+
+    // Splash screen timeout
+    window.onload = () => {
+      console.log('Splash screen loaded');
+      setTimeout(() => {
+        document.getElementById('splash-screen').style.display = 'none';
+        document.getElementById('desktop').style.display = 'block';
+        loadClients();
+        checkSession();
+      }, 5000);
+    };
+
+    // Verificar sessão
+    async function checkSession() {
+      const email = localStorage.getItem('userEmail');
+      console.log('VERIFICANDO SESSÃO PARA EMAIL:', email);
+      if (email) {
+        try {
+          const response = await fetch('/api/check-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const result = await response.json();
+          console.log('RESPOSTA DA VERIFICAÇÃO DE SESSÃO:', result);
+          if (response.ok) {
+            currentUser = { username: result.username, email: result.email, isMaster: result.isMaster };
+          } else {
+            localStorage.removeItem('userEmail');
+          }
+        } catch (err) {
+          console.error('ERRO AO VERIFICAR SESSÃO:', err);
+          alert('ERRO AO VERIFICAR SESSÃO');
+        }
+      }
+    }
+
+    function openWindow(title, content) {
+      console.log('Abrindo janela:', title, 'com conteúdo:', content);
+      let windowDiv = document.querySelector('.window');
+      if (windowDiv) {
+        windowDiv.querySelector('.window-title').textContent = title;
+        windowDiv.querySelector('.window-content').innerHTML = content;
+      } else {
+        windowDiv = document.createElement('div');
+        windowDiv.className = 'window';
+        windowDiv.innerHTML = `
+          <div class="window-titlebar">
+            <span class="window-title">${title}</span>
+            <div class="window-buttons">
+              <button onclick="closeWindow(this)">X</button>
+            </div>
+          </div>
+          <div class="window-content">${content}</div>
+        `;
+        document.getElementById('desktop').appendChild(windowDiv);
+      }
+    }
+
+    function closeWindow(button) {
+      console.log('BOTÃO DE FECHAR CLICADO');
+      const windowDiv = button.closest('.window');
+      if (windowDiv) windowDiv.remove();
+      else console.error('ERRO: JANELA NÃO ENCONTRADA');
+    }
+
+    function showAuthWindow() {
+      if (currentUser) {
+        return openWindow('USUÁRIO', `<h3>USUÁRIO</h3><p>LOGADO COMO: ${currentUser.username}</p><button class="btn" onclick="logout()">SAIR</button>`);
+      }
+      const authContent = `
+        <div id="auth-tabs">
+          <button class="btn" onclick="showTab('login')">LOGIN</button>
+          <button class="btn" onclick="showTab('register')">CADASTRO</button>
+        </div>
+        <div id="login-tab" class="auth-form tab-content active">
+          <h3>LOGIN</h3>
+          <form onsubmit="handleLogin(event)">
+            <p>E-MAIL: <input type="email" id="login-email" required></p>
+            <p>SENHA: <input type="password" id="login-password" required></p>
+            <button class="btn" type="submit">ENTRAR</button>
+          </form>
+        </div>
+        <div id="register-tab" class="auth-form tab-content">
+          <h3>CADASTRO</h3>
+          <form onsubmit="handleRegister(event)">
+            <p>NOME: <input type="text" id="register-username" required></p>
+            <p>E-MAIL: <input type="email" id="register-email" required></p>
+            <p>SENHA: <input type="password" id="register-password" required></p>
+            <button class="btn" type="submit">CADASTRAR</button>
+          </form>
+        </div>
+      `;
+      openWindow('LOGIN/CADASTRO', authContent);
+    }
+
+    function showTab(tab) {
+      console.log('MUDANDO PARA ABA:', tab);
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById(`${tab}-tab`).classList.add('active');
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      console.log('BOTÃO DE CADASTRO CLICADO');
+      const username = document.getElementById('register-username').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      console.log('TENTATIVA DE CADASTRO:', { username, email });
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password, isMaster: email.includes('@nacionalinvestimentos.com') })
+        });
+        const result = await response.json();
+        console.log('RESPOSTA DO SERVIDOR (CADASTRO):', result);
+        alert(result.message || result.error);
+        if (response.ok) {
+          localStorage.setItem('userEmail', email);
+          currentUser = { username, email, isMaster: result.isMaster };
+          closeWindow(document.querySelector('.window'));
+        }
+      } catch (err) {
+        console.error('ERRO NA REQUISIÇÃO DE CADASTRO:', err);
+        alert('ERRO AO CONECTAR COM O SERVIDOR');
+      }
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      console.log('BOTÃO DE LOGIN CLICADO');
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      console.log('TENTATIVA DE LOGIN:', { email });
+
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const result = await response.json();
+        console.log('RESPOSTA DO SERVIDOR (LOGIN):', result);
+        alert(result.message || result.error);
+        if (response.ok) {
+          localStorage.setItem('userEmail', email);
+          currentUser = { username: result.username, email, isMaster: result.isMaster };
+          closeWindow(document.querySelector('.window'));
+        }
+      } catch (err) {
+        console.error('ERRO NA REQUISIÇÃO DE LOGIN:', err);
+        alert('ERRO AO CONECTAR COM O SERVIDOR');
+      }
+    }
+
+    function logout() {
+      console.log('LOGOUT SOLICITADO');
+      localStorage.removeItem('userEmail');
+      currentUser = null;
+      alert('VOCÊ SAIU DA SESSÃO');
+      closeWindow(document.querySelector('.window'));
+    }
+
+    function showAgenda() {
+      if (!currentUser) return alert('FAÇA LOGIN PARA ACESSAR A AGENDA');
+      const agendaContent = `
+        <div class="content-tabs">
+          <button class="btn" onclick="showContentTab('agenda-form')">CADASTRAR</button>
+          <button class="btn" onclick="showContentTab('agenda-list'); loadMeetings()">LISTAR</button>
+        </div>
+        <div id="agenda-form" class="tab-content active">
+          <h3>AGENDAR REUNIÃO</h3>
+          <form class="meeting-form" onsubmit="handleMeeting(event)">
+            <p>DATA/HORA: <input type="datetime-local" id="meeting-datetime" required></p>
+            <p>TELEFONE: <input type="tel" id="meeting-phone" required></p>
+            <p>E-MAIL: <input type="email" id="meeting-email" required></p>
+            <p>VENDEDOR: <input type="text" id="meeting-seller" required></p>
+            <p>DESCRIÇÃO: <textarea id="meeting-description"></textarea></p>
+            <button class="btn" type="submit">AGENDAR</button>
+          </form>
+        </div>
+        <div id="agenda-list" class="tab-content">
+          <h3>REUNIÕES AGENDADAS</h3>
+          <div class="list" id="meetings-list"></div>
+        </div>
+      `;
+      openWindow('AGENDA', agendaContent);
+    }
+
+    async function handleMeeting(event) {
+      event.preventDefault();
+      console.log('BOTÃO DE AGENDAR CLICADO');
+      const dateTime = document.getElementById('meeting-datetime').value;
+      const phone = document.getElementById('meeting-phone').value;
+      const email = document.getElementById('meeting-email').value;
+      const seller = document.getElementById('meeting-seller').value;
+      const description = document.getElementById('meeting-description').value;
+
+      try {
+        const response = await fetch('/api/meetings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dateTime, phone, email, seller, description, userEmail: currentUser.email })
+        });
+        const result = await response.json();
+        console.log('RESPOSTA DO SERVIDOR (AGENDAMENTO):', result);
+        alert(result.message || result.error);
+        if (response.ok) {
+          event.target.reset();
+          showContentTab('agenda-list');
+          loadMeetings();
+        }
+      } catch (err) {
+        console.error('ERRO NA REQUISIÇÃO DE AGENDAMENTO:', err);
+        alert('ERRO AO CONECTAR COM O SERVIDOR');
+      }
+    }
+
+    async function loadMeetings() {
+      try {
+        const response = await fetch(`/api/meetings/${encodeURIComponent(currentUser.email)}`);
+        const meetings = await response.json();
+        console.log('REUNIÕES CARREGADAS:', meetings);
+        const list = document.getElementById('meetings-list');
+        list.innerHTML = meetings.length ? meetings.map(m => `
+          <div>
+            <p><strong>DATA/HORA:</strong> ${new Date(m.dateTime).toLocaleString()}</p>
+            <p><strong>TELEFONE:</strong> ${m.phone}</p>
+            <p><strong>E-MAIL:</strong> ${m.email}</p>
+            <p><strong>VENDEDOR:</strong> ${m.seller}</p>
+            <p><strong>DESCRIÇÃO:</strong> ${m.description || 'N/A'}</p>
+            ${currentUser.isMaster ? `<p><strong>USUÁRIO:</strong> ${m.userEmail}</p>` : ''}
+          </div>
+        `).join('') : '<p>NENHUMA REUNIÃO AGENDADA.</p>';
+      } catch (err) {
+        console.error('ERRO AO CARREGAR REUNIÕES:', err);
+        alert('ERRO AO CONECTAR COM O SERVIDOR');
+      }
+    }
+
+    function showFunnel() {
+      if (!currentUser) return alert('FAÇA LOGIN PARA ACESSAR O FUNIL');
+      const funnelContent = `
+        <div class="content-tabs">
+          <button class="btn" onclick="showContentTab('funnel-form')">CADASTRAR</button>
+          <button class="btn" onclick="showContentTab('funnel-list'); loadFunnel()">LISTAR</button>
+        </div>
+        <div id="funnel-form" class="tab-content active">
+          <h3>ADICIONAR OPORTUNIDADE</h3>
+          <form class="funnel-form" onsubmit="handleFunnel(event)">
+            <p>NOME DO CLIENTE: <input type="text" id="funnel-client" required></p>
+            <p>VALOR ESTIMADO: <input type="number" id="funnel-value" required></p>
+            <p>ETAPA: 
+              <select id="funnel-stage" required>
+                <option value="PROSPECÇÃO">PROSPECÇÃO</option>
+                <option value="CONTATO INICIAL">CONTATO INICIAL</option>
+                <option value="PROPOSTA">PROPOSTA</option>
+                <option value="NEGOCIAÇÃO">NEGOCIAÇÃO</option>
+                <option value="FECHAMENTO">FECHAMENTO</option>
+              </select>
+            </p>
+            <p>ESPECIALISTA: 
+              <select id="funnel-specialist" required>
+                <option value="Especialista 1">Especialista 1</option>
+                <option value="Especialista 2">Especialista 2</option>
+                <option value="Especialista 3">Especialista 3</option>
+              </select>
+            </p>
+            <p>SOLICITAR APOIO TÉCNICO: 
+              <select id="funnel-tech-support" required>
+                <option value="Não">Não</option>
+                <option value="Sim">Sim</option>
+              </select>
+            </p>
+            <p>OBSERVAÇÕES: <textarea id="funnel-notes"></textarea></p>
+            <button class="btn" type="submit">ADICIONAR</button>
+          </form>
+        </div>
+        <div id="funnel-list" class="tab-content">
+          <h3>OPORTUNIDADES NO FUNIL</h3>
+          <div class="list" id="funnel-list"></div>
+        </div>
+      `;
+      openWindow('FUNIL', funnelContent);
+    }
+
+    async function handleFunnel(event) {
+      event.preventDefault();
+      console.log('BOTÃO DE ADICIONAR FUNIL CLICADO');
+      const clientName = document.getElementById('funnel-client').value;
+      const value = document.getElementById('funnel-value').value;
+      const stage = document.getElementById('funnel-stage').value;
+      const specialist = document.getElementById('funnel-specialist').value;
+      const techSupport = document.getElementById('funnel-tech-support').value;
+      const notes = document.getElementById('funnel-notes').value;
+
+      try {
+        const response = await fetch('/api/funnel', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clientName, value, stage, specialist, techSupport, notes, userEmail: currentUser.email })
+        });
+        const result = await response.json();
+        console.log('RESPOSTA DO SERVIDOR (FUNIL):', result);
+        alert(result.message || result.error);
+        if (response.ok) {
+          event.target.reset();
+          showContentTab('funnel-list');
+          loadFunnel();
+          loadClients();
+        }
+      } catch (err) {
+        console.error('ERRO NA REQUISIÇÃO DE FUNIL:', err);
+        alert('ERRO AO CONECTAR COM O SERVIDOR');
+      }
+    }
+
+    async function loadFunnel() {
+      try {
+        const response = await fetch(`/api/funnel/${encodeURIComponent(currentUser.email)}`);
+        const funnel = await response.json();
+        console.log('FUNIL CARREGADO:', funnel);
+        const list = document.getElementById('funnel-list');
+        list.innerHTML = funnel.length ? funnel.map((f, index) => `
+          <div>
+            <p><strong>CLIENTE:</strong> ${f.clientName}</p>
+            <p><strong>VALOR:</strong> R$${parseFloat(f.value).toFixed(2)}</p>
+            <p><strong>ETAPA:</strong> <span class="stage-${f.stage.toLowerCase().replace(/ /g, '-')}">${f.stage}</span></p>
+            <p><strong>ESPECIALISTA:</strong> ${f.specialist || 'N/A'}</p>
+            <p><strong>APOIO TÉCNICO:</strong> ${f.techSupport || 'Não'}</p>
+            <p><strong>OBSERVAÇÕES:</strong> ${f.notes || 'N/A'}</p>
+            ${currentUser.isMaster ? `<p><strong>USUÁRIO:</strong> ${f.userEmail}</p>` : ''}
+            <select onchange="updateStage(${index}, this.value)">
+              <option value="PROSPECÇÃO" ${f.stage === 'PROSPECÇÃO' ? 'selected' : ''}>PROSPECÇÃO</option>
+              <option value="CONTATO INICIAL" ${f.stage === 'CONTATO INICIAL' ? 'selected' : ''}>CONTATO INICIAL</option>
+              <option value="PROPOSTA" ${f.stage === 'PROPOSTA' ? 'selected' : ''}>PROPOSTA</option>
+              <option value="NEGOCIAÇÃO" ${f.stage === 'NEGOCIAÇÃO' ? 'selected' : ''}>NEGOCIAÇÃO</option>
+              <option value="FECHAMENTO" ${f.stage === 'FECHAMENTO' ? 'selected' : ''}>FECHAMENTO</option>
+            </select>
+          </div>
+        `).join('') : '<p>NENHUMA OPORTUNIDADE NO FUNIL.</p>';
+      } catch (err) {
+        console.error('ERRO AO CARREGAR FUNIL:', err);
+        alert('ERRO AO CONECTAR COM O SERVIDOR');
+      }
+    }
+
+    async function updateStage(index, stage) {
+      console.log('ATUALIZANDO ETAPA:', { index, stage });
+      try {
+        const response = await fetch(`/api/funnel/${index}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ stage, userEmail: currentUser.email })
+        });
+        const result = await response.json();
+        console.log('RESPOSTA DO SERVIDOR (ATUALIZAÇÃO DE ETAPA):', result);
+        alert(result.message || result.error);
+        if (response.ok) loadFunnel();
+      } catch (err) {
+        console.error('ERRO NA ATUALIZAÇÃO DE ETAPA:', err);
+        alert('ERRO AO CONECTAR COM O SERVIDOR');
+      }
+    }
+
+    function showContentTab(tab) {
+      console.log('MUDANDO PARA ABA DE CONTEÚDO:', tab);
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+    }
+
+    async function loadClients() {
+      if (!currentUser) return;
+      try {
+        const response = await fetch(`/api/funnel/${encodeURIComponent(currentUser.email)}`);
+        const funnel = await response.json();
+        console.log('CLIENTES CARREGADOS:', funnel);
+        const table = document.getElementById('client-table');
+        table.innerHTML = `
+          <table>
+            <tr>
+              <th>CLIENTE</th>
+              <th>VALOR</th>
+              <th>ETAPA</th>
+              <th>OBSERVAÇÕES</th>
+            </tr>
+            ${funnel.length ? funnel.map(f => `
+              <tr>
+                <td>${f.clientName}</td>
+                <td>R$${parseFloat(f.value).toFixed(2)}</td>
+                <td class="stage-${f.stage.toLowerCase().replace(/ /g, '-')}">${f.stage}</td>
+                <td>${f.notes || 'N/A'}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="4">NENHUM CLIENTE REGISTRADO</td></tr>'}
+          </table>
+        `;
+      } catch (err) {
+        console.error('ERRO AO CARREGAR CLIENTES:', err);
+        document.getElementById('client-table').innerHTML = '<p>ERRO AO CARREGAR CLIENTES</p>';
+      }
+    }
+
+    function makeDraggable(element) {
+      // Removed dragging functionality to keep window fixed
+    }
+
+    // Simulated user data (to be implemented in server.js)
+    const users = [
+      { username: 'especialista01', email: 'especialista01@nclseguros.com.br', password: 'espec01@', isMaster: false },
+      { username: 'especialista02', email: 'especialista02@nclseguros.com.br', password: 'espec02@', isMaster: false },
+      { username: 'especialista03', email: 'especialista03@nclseguros.com.br', password: 'espec03@', isMaster: false },
+      { username: 'especialista04', email: 'especialista04@nclseguros.com.br', password: 'espec04@', isMaster: false },
+      { username: 'especialista05', email: 'especialista05@nclseguros.com.br', password: 'espec05@', isMaster: false },
+      { username: 'especialista06', email: 'especialista06@nclseguros.com.br', password: 'espec06@', isMaster: false },
+      { username: 'especialista07', email: 'especialista07@nclseguros.com.br', password: 'espec07@', isMaster: false },
+      { username: 'especialista08', email: 'especialista08@nclseguros.com.br', password: 'espec08@', isMaster: false },
+      { username: 'especialista09', email: 'especialista09@nclseguros.com.br', password: 'espec09@', isMaster: false },
+      { username: 'especialista10', email: 'especialista10@nclseguros.com.br', password: 'espec10@', isMaster: false },
+      { username: 'monica', email: 'monica@nacionalinvestimentos.com', password: 'Mandrake1987@@', isMaster: true },
+      { username: 'silvestre', email: 'silvestre@nacionalinvestimentos.com', password: 'Mandrake1987@@', isMaster: true }
+    ];
+
+    // Note: Actual user management should be handled server-side in server.js
+  </script>
+</body>
+</html>
