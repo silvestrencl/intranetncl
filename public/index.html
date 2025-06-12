@@ -15,6 +15,7 @@
       background-color: #000;
       color: #ffa500;
     }
+
     #splash-screen {
       position: fixed;
       top: 0;
@@ -30,11 +31,13 @@
       z-index: 1000;
       text-shadow: 0 0 2px #000, 0 0 2px #000;
     }
+
     #splash-screen .buttons {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
+
     #splash-screen .btn {
       background: #808080;
       border: 2px solid #ffa500;
@@ -49,12 +52,15 @@
       text-transform: uppercase;
       box-sizing: border-box;
     }
+
     #splash-screen .btn:hover {
       background: #a0a0a0;
     }
+
     #splash-screen .btn:active {
       background: #b0b0b0;
     }
+
     #splash-screen .company-data {
       position: absolute;
       bottom: 20px;
@@ -62,6 +68,7 @@
       font-size: 18px;
       letter-spacing: 2px;
     }
+
     #desktop {
       position: relative;
       width: 100vw;
@@ -69,42 +76,50 @@
       background: #000;
       display: none;
     }
+
     .logo {
       display: none;
     }
+
     .desktop-icon {
       position: absolute;
       text-align: center;
       color: #ffa500;
       cursor: pointer;
-      width: 150px; /* Increased to fit "LOGIN/CADASTRO" */
+      width: 150px;
       padding: 15px;
       background-color: rgba(128, 128, 128, 0.7);
       border: 2px solid #ffa500;
       box-sizing: border-box;
     }
+
     .desktop-icon img {
       width: 48px;
       height: 48px;
     }
+
     .desktop-icon span {
       display: block;
       margin-top: 5px;
       font-size: 14px;
-      white-space: normal; /* Allow text to wrap */
+      white-space: normal;
     }
+
     .window {
       position: fixed;
       border: 2px solid #ffa500;
       background: #000;
-      min-width: 350px;
-      min-height: 250px;
-      max-width: 700px;
+      min-width: 300px; /* Ajustado para telas menores */
+      min-height: 200px;
+      max-width: 90vw; /* Limite máximo adaptável */
       z-index: 10;
       top: 50px;
       left: 50%;
       transform: translateX(-50%);
+      overflow-y: auto; /* Rolagem vertical */
+      max-height: 80vh; /* Altura máxima para rolagem */
     }
+
     .window-titlebar {
       background: #000080;
       color: #ffa500;
@@ -114,10 +129,12 @@
       justify-content: space-between;
       align-items: center;
     }
+
     .window-title {
       flex-grow: 1;
       padding-left: 5px;
     }
+
     .window-buttons button {
       width: 16px;
       height: 16px;
@@ -128,6 +145,7 @@
       margin-right: 2px;
       color: #ffa500;
     }
+
     .window-content {
       padding: 10px;
       background: #000;
@@ -136,10 +154,12 @@
       color: #ffa500;
       text-align: center;
     }
+
     .auth-form, .meeting-form, .funnel-form, .upload-form {
       margin-top: 10px;
       text-align: left;
     }
+
     .auth-form h3, .tab-content h3 {
       font-size: 36px;
       letter-spacing: 2px;
@@ -147,6 +167,7 @@
       color: #ffa500;
       text-align: center;
     }
+
     input, select, textarea, #file-upload {
       width: calc(100% - 20px);
       border: 2px solid #ffa500;
@@ -157,6 +178,7 @@
       background: #000;
       color: #ffa500;
     }
+
     .btn {
       background: #808080;
       border: 2px solid #ffa500;
@@ -172,18 +194,22 @@
       pointer-events: auto;
       text-transform: uppercase;
     }
+
     .btn:hover {
       background: #a0a0a0;
     }
+
     .btn:active {
       background: #b0b0b0;
     }
+
     #auth-tabs, .content-tabs {
       margin-bottom: 15px;
       display: flex;
       gap: 5px;
       justify-content: center;
     }
+
     #auth-tabs button, .content-tabs button {
       width: 150px;
       margin-right: 5px;
@@ -196,10 +222,12 @@
       border: 2px solid #ffa500;
       color: #ffa500;
     }
+
     .list, .table {
       margin-top: 15px;
       text-align: left;
     }
+
     .list div, .table table {
       border: 1px solid #ffa500;
       padding: 10px;
@@ -207,10 +235,12 @@
       background: #000;
       color: #ffa500;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
     }
+
     th, td {
       border: 1px solid #ffa500;
       padding: 8px;
@@ -218,27 +248,81 @@
       background: #000;
       color: #ffa500;
     }
+
     th {
       background-color: #000080;
       color: #ffa500;
     }
+
     .tab-content {
       display: none;
       text-align: center;
     }
+
     .tab-content.active {
       display: block;
     }
+
     .stage-prospecção { color: red; }
     .stage-contato-inicial { color: orange; }
     .stage-proposta { color: yellow; }
     .stage-negociação { color: green; }
     .stage-fechamento { color: blue; }
+
     .checklist-item {
       margin: 10px 0;
       text-align: left;
       display: inline-block;
       width: 90%;
+    }
+
+    /* Media Queries para Responsividade */
+    @media (max-width: 600px) {
+      .window {
+        min-width: 90vw;
+        max-width: 95vw;
+        min-height: 150px;
+        top: 20px;
+      }
+
+      .desktop-icon {
+        width: 120px;
+        padding: 10px;
+      }
+
+      .desktop-icon img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .desktop-icon span {
+        font-size: 12px;
+      }
+
+      .window-content {
+        font-size: 14px;
+      }
+
+      input, select, textarea, #file-upload {
+        font-size: 14px;
+        padding: 6px;
+      }
+
+      .btn {
+        font-size: 16px;
+        padding: 10px 15px;
+        min-width: 120px;
+      }
+
+      #auth-tabs button, .content-tabs button {
+        width: 120px;
+        font-size: 16px;
+        padding: 10px;
+      }
+
+      .auth-form h3, .tab-content h3 {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
@@ -615,7 +699,7 @@
             <p><strong>APOIO TÉCNICO:</strong> ${f.techSupport || 'Não'}</p>
             <p><strong>OBSERVAÇÕES:</strong> ${f.notes || 'N/A'}</p>
             ${currentUser.isMaster ? `<p><strong>USUÁRIO:</strong> ${f.userEmail}</p>` : ''}
-            <select onchange="updateStage(${index}, this.value)">
+            <select onchange="updateStage(${f.id}, this.value)">
               <option value="PROSPECÇÃO" ${f.stage === 'PROSPECÇÃO' ? 'selected' : ''}>PROSPECÇÃO</option>
               <option value="CONTATO INICIAL" ${f.stage === 'CONTATO INICIAL' ? 'selected' : ''}>CONTATO INICIAL</option>
               <option value="PROPOSTA" ${f.stage === 'PROPOSTA' ? 'selected' : ''}>PROPOSTA</option>
@@ -630,10 +714,10 @@
       }
     }
 
-    async function updateStage(index, stage) {
-      console.log('ATUALIZANDO ETAPA:', { index, stage });
+    async function updateStage(id, stage) {
+      console.log('ATUALIZANDO ETAPA:', { id, stage });
       try {
-        const response = await fetch(`/api/funnel/${index}`, {
+        const response = await fetch(`/api/funnel/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ stage, userEmail: currentUser.email })
