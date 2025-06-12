@@ -7,13 +7,10 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Courier New', 'Courier', monospace;
-      text-transform: uppercase;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #000000;
       overflow: hidden;
-      -webkit-font-smoothing: none;
-      -moz-osx-font-smoothing: grayscale;
-      background-color: #000;
-      color: #ffa500;
     }
 
     #splash-screen {
@@ -22,14 +19,13 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #000080;
-      color: #ffa500;
+      background-color: #007bff;
+      color: #ffffff;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      text-shadow: 0 0 2px #000, 0 0 2px #000;
     }
 
     #splash-screen .buttons {
@@ -39,26 +35,25 @@
     }
 
     #splash-screen .btn {
-      background: #808080;
-      border: 2px solid #ffa500;
+      background: #ffffff;
+      border: 2px solid #007bff;
       padding: 15px 40px;
       cursor: pointer;
       font-size: 24px;
-      color: #ffa500;
+      color: #007bff;
       text-align: center;
       min-width: 250px;
       z-index: 1000;
       pointer-events: auto;
-      text-transform: uppercase;
       box-sizing: border-box;
     }
 
     #splash-screen .btn:hover {
-      background: #a0a0a0;
+      background: #e6f0fa;
     }
 
     #splash-screen .btn:active {
-      background: #b0b0b0;
+      background: #cce0ff;
     }
 
     #splash-screen .company-data {
@@ -66,31 +61,37 @@
       bottom: 20px;
       text-align: center;
       font-size: 18px;
-      letter-spacing: 2px;
     }
 
     #desktop {
       position: relative;
       width: 100vw;
       height: 100vh;
-      background: #000;
+      background: #ffffff;
       display: none;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    .logo {
-      display: none;
+    .desktop-icons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     .desktop-icon {
-      position: absolute;
       text-align: center;
-      color: #ffa500;
+      color: #007bff;
       cursor: pointer;
-      width: 150px;
       padding: 15px;
-      background-color: rgba(128, 128, 128, 0.7);
-      border: 2px solid #ffa500;
+      background-color: rgba(0, 123, 255, 0.1);
+      border: 2px solid #007bff;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .desktop-icon img {
@@ -107,22 +108,22 @@
 
     .window {
       position: fixed;
-      border: 2px solid #ffa500;
-      background: #000;
-      min-width: 300px; /* Ajustado para telas menores */
+      border: 2px solid #007bff;
+      background: #ffffff;
+      min-width: 300px;
       min-height: 200px;
-      max-width: 90vw; /* Limite máximo adaptável */
+      max-width: 90vw;
       z-index: 10;
       top: 50px;
       left: 50%;
       transform: translateX(-50%);
-      overflow-y: auto; /* Rolagem vertical */
-      max-height: 80vh; /* Altura máxima para rolagem */
+      overflow-y: auto;
+      max-height: 80vh;
     }
 
     .window-titlebar {
-      background: #000080;
-      color: #ffa500;
+      background: #007bff;
+      color: #ffffff;
       padding: 4px;
       font-weight: bold;
       display: flex;
@@ -138,20 +139,20 @@
     .window-buttons button {
       width: 16px;
       height: 16px;
-      background: #808080;
-      border: 1px solid #ffa500;
+      background: #ffffff;
+      border: 1px solid #007bff;
       font-size: 10px;
       cursor: pointer;
       margin-right: 2px;
-      color: #ffa500;
+      color: #007bff;
     }
 
     .window-content {
       padding: 10px;
-      background: #000;
+      background: #ffffff;
       height: calc(100% - 24px);
       box-sizing: border-box;
-      color: #ffa500;
+      color: #000000;
       text-align: center;
     }
 
@@ -162,45 +163,42 @@
 
     .auth-form h3, .tab-content h3 {
       font-size: 36px;
-      letter-spacing: 2px;
       margin-bottom: 20px;
-      color: #ffa500;
+      color: #007bff;
       text-align: center;
     }
 
     input, select, textarea, #file-upload {
       width: calc(100% - 20px);
-      border: 2px solid #ffa500;
+      border: 2px solid #007bff;
       padding: 8px;
       margin: 8px 0;
       font-size: 16px;
-      text-transform: uppercase;
-      background: #000;
-      color: #ffa500;
+      background: #ffffff;
+      color: #000000;
     }
 
     .btn {
-      background: #808080;
-      border: 2px solid #ffa500;
+      background: #007bff;
+      border: 2px solid #007bff;
       padding: 12px 20px;
       cursor: pointer;
       font-size: 20px;
-      color: #ffa500;
+      color: #ffffff;
       display: inline-block;
       text-align: center;
       min-width: 150px;
       margin: 10px 0;
       z-index: 1000;
       pointer-events: auto;
-      text-transform: uppercase;
     }
 
     .btn:hover {
-      background: #a0a0a0;
+      background: #0056b3;
     }
 
     .btn:active {
-      background: #b0b0b0;
+      background: #004085;
     }
 
     #auth-tabs, .content-tabs {
@@ -217,10 +215,9 @@
       padding: 12px;
       z-index: 1000;
       pointer-events: auto;
-      text-transform: uppercase;
-      background: #808080;
-      border: 2px solid #ffa500;
-      color: #ffa500;
+      background: #ffffff;
+      border: 2px solid #007bff;
+      color: #007bff;
     }
 
     .list, .table {
@@ -229,11 +226,11 @@
     }
 
     .list div, .table table {
-      border: 1px solid #ffa500;
+      border: 1px solid #007bff;
       padding: 10px;
       margin-bottom: 10px;
-      background: #000;
-      color: #ffa500;
+      background: #ffffff;
+      color: #000000;
     }
 
     table {
@@ -242,16 +239,16 @@
     }
 
     th, td {
-      border: 1px solid #ffa500;
+      border: 1px solid #007bff;
       padding: 8px;
       text-align: left;
-      background: #000;
-      color: #ffa500;
+      background: #ffffff;
+      color: #000000;
     }
 
     th {
-      background-color: #000080;
-      color: #ffa500;
+      background-color: #007bff;
+      color: #ffffff;
     }
 
     .tab-content {
@@ -283,6 +280,11 @@
         max-width: 95vw;
         min-height: 150px;
         top: 20px;
+      }
+
+      .desktop-icons {
+        grid-template-columns: 1fr; /* Uma coluna em telas menores */
+        max-width: 100%;
       }
 
       .desktop-icon {
@@ -340,25 +342,27 @@
     </div>
   </div>
   <div id="desktop" class="desktop">
-    <div class="desktop-icon" style="top: 50px; left: 50px;" onclick="openWindow('HELP', '<h3>HELP</h3><p>SUPPORT INFORMATION HERE.</p>')">
-      <img src="images/ajuda.png" alt="AJUDA">
-      <span>AJUDA</span>
-    </div>
-    <div class="desktop-icon" style="top: 50px; left: 200px;" onclick="openWindow('SETTINGS', '<h3>TREINAMENTOS</h3><p><a href="https://drive.google.com/drive/folders/1qOOXsmrgh87AmgoqtmFeKRL-ilpZgmTk?usp=sharing" target="_blank">ACESSAR TREINAMENTOS</a></p>')">
-      <img src="images/treinamento.png" alt="TREINAMENTO">
-      <span>TREINAMENTO</span>
-    </div>
-    <div class="desktop-icon" style="top: 50px; left: 350px;" onclick="showAuthWindow()">
-      <img src="images/cadastro.png" alt="LOGIN/CADASTRO">
-      <span>LOGIN/CADASTRO</span>
-    </div>
-    <div class="desktop-icon" style="top: 150px; left: 50px;" onclick="showAgenda()">
-      <img src="images/calendario.png" alt="AGENDA">
-      <span>AGENDA</span>
-    </div>
-    <div class="desktop-icon" style="top: 150px; left: 200px;" onclick="showFunnel()">
-      <img src="images/funil.png" alt="FUNIL">
-      <span>FUNIL</span>
+    <div class="desktop-icons">
+      <div class="desktop-icon" onclick="openWindow('HELP', '<h3>HELP</h3><p>SUPPORT INFORMATION HERE.</p>')">
+        <img src="images/ajuda.png" alt="AJUDA">
+        <span>AJUDA</span>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('SETTINGS', '<h3>TREINAMENTOS</h3><p><a href="https://drive.google.com/drive/folders/1qOOXsmrgh87AmgoqtmFeKRL-ilpZgmTk?usp=sharing" target="_blank">ACESSAR TREINAMENTOS</a></p>')">
+        <img src="images/treinamento.png" alt="TREINAMENTO">
+        <span>TREINAMENTOS</span>
+      </div>
+      <div class="desktop-icon" onclick="showAuthWindow()">
+        <img src="images/cadastro.png" alt="LOGIN/CADASTRO">
+        <span>LOGIN/CADASTRO</span>
+      </div>
+      <div class="desktop-icon" onclick="showAgenda()">
+        <img src="images/calendario.png" alt="AGENDA">
+        <span>AGENDA</span>
+      </div>
+      <div class="desktop-icon" onclick="showFunnel()">
+        <img src="images/funil.png" alt="FUNIL">
+        <span>FUNIL</span>
+      </div>
     </div>
     <div class="table" id="client-table"></div>
   </div>
@@ -773,7 +777,7 @@
       // Removed dragging functionality to keep window fixed
     }
 
-    // Simulated user data (to be implemented in server.js)
+    // Simulated user data (to be managed server-side)
     const users = [
       { username: 'especialista01', email: 'especialista01@nclseguros.com.br', password: 'espec01@', isMaster: false },
       { username: 'especialista02', email: 'especialista02@nclseguros.com.br', password: 'espec02@', isMaster: false },
@@ -785,11 +789,9 @@
       { username: 'especialista08', email: 'especialista08@nclseguros.com.br', password: 'espec08@', isMaster: false },
       { username: 'especialista09', email: 'especialista09@nclseguros.com.br', password: 'espec09@', isMaster: false },
       { username: 'especialista10', email: 'especialista10@nclseguros.com.br', password: 'espec10@', isMaster: false },
-      { username: 'monica', email: 'monica@nacionalinvestimentos.com', password: 'Mandrake1987@@', isMaster: true },
-      { username: 'silvestre', email: 'silvestre@nacionalinvestimentos.com', password: 'Mandrake1987@@', isMaster: true }
+      { username: 'monica', email: 'monica@nacionalinvestimentos.com', password: 'Master2025@', isMaster: true },
+      { username: 'silvestre', email: 'silvestre@nacionalinvestimentos.com', password: 'Master2025@', isMaster: true }
     ];
-
-    // Note: Actual user management should be handled server-side in server.js
   </script>
 </body>
 </html>
